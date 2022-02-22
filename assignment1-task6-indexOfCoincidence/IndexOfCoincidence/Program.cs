@@ -32,7 +32,11 @@ namespace IndexOfCoincidence
             // I am not sure what is the right way to do with them, but I assume we have to just dispose them later.
             // This will count things like spaces, comas, dots and other symbols which are not useful in our counter.
             int uncountableChars = 0;
-
+            
+            // The IC will be used to count the Index Of Coincidence (or IC for short).
+            // Should be double, since we are going to work with <1 probabilities.
+            double ic = 0;
+            
             // Since I love working with arrays, I will change 'message' from string to array.
             // Additionally, since our alphabet is Upper-Case, we make the 'Message' to upper too.
             char[] messageArray = Message.ToUpper().ToCharArray();
@@ -71,21 +75,33 @@ namespace IndexOfCoincidence
                 }
             }
             
+            // Here we go through all the letters in our dictionary.
+            // I am using the index of coincidence formula: IC(X) = (na / N) * ((na - 1) / (N - 1)) + (nb / N) * ((nb - 1) / (N - 1)) + ... + (nz / N) * ((nz - 1) / (N - 1)), where:
+            // X is an N-letter text
+            // and na, nb, ..., nz are denoting the numbers of occurrences of a, b, ..., z in X.
+            // The only difference to that formula is the subtraction of 'uncountableChars' from the 'messageArray', since it contain not only the correct letter but spaces/ commas and dots.
+            // totalLetterCount is equal to 'N' from the formula.
+            // letter.Value is equal to 'na', 'nb', ..., 'nz' from the formula
+            double totalLetterCount = (messageArray.Length - uncountableChars);
             foreach (var letter in alphabetCounter)
             {
-                Console.WriteLine("Letter: " + letter.Key + ", Count: " + letter.Value);
+                ic += (letter.Value / totalLetterCount) * ((letter.Value - 1) / (totalLetterCount-1));
             }
+            
+            // Frequency table for the message.
+            // Not visually ideal, sorry.
+            Console.WriteLine("+-----------+-----------+");
+            foreach (var letter in alphabetCounter)
+            {
+                Console.WriteLine("| Letter: " + letter.Key + " | Count: " + letter.Value + " |");
+            }
+            Console.WriteLine("+----------+----------+");
+            
+            // Some basic statistics which is not required in the task, but useful to see.
             Console.WriteLine("The amount of non-alphabet letters: " + uncountableChars);
             Console.WriteLine("The total number of letters: " + Message.Length);
 
-            double ic = 0;
-            
-            foreach (var letter in alphabetCounter)
-            {
-                //
-                ic += (letter.Value / (double) (messageArray.Length - uncountableChars)) * ((letter.Value - 1) / (double)((messageArray.Length - 1 - uncountableChars)));
-            }
-            
+            // The index of coincidence. 
             Console.WriteLine("The current IC(X) = " + ic);
             Console.WriteLine("IC(X) ~ 0.038 for a random text ~ 0.065 for a meaningful text.");
             
