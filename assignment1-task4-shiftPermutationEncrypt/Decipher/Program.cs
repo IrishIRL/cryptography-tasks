@@ -15,7 +15,8 @@ namespace Decipher
     class Program
     {
         // This is the declaration of our Alphabet Letters (in the Alphabetic order).
-        public static readonly char[] AlphabetLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+        // Make all letters to upper-case, to ease the work with the code.
+        public static readonly char[] AlphabetLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToUpper().ToCharArray();
         
         static void Main()
         {
@@ -24,12 +25,13 @@ namespace Decipher
             int shiftOne = 17;
             int shiftTwo = 8;
             
-            // For permutationOne and permutationTwo we are declaring the keys of permutation
+            // For permutationOne and permutationTwo we are declaring the keys of permutation.
             int[] permutationOne = {5, 1, 3, 2, 4};
             int[] permutationTwo = {3, 4, 5, 1, 2};
             
-            // Our plaintext is the text that we want to encrypt
-            string plaintext = "MOTIVATION";
+            // Our plaintext is the text that we want to encrypt.
+            // We also make it to upper case, because the alphabet letters are in the upper-case.
+            string plaintext = "MOTIVATION".ToUpper();
             
             // I am also working with arrays everywhere after, so making from the plaintext array. 
             char[] plaintextArray = plaintext.ToCharArray();
